@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>祁连山国家公园全过程监控系统</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+    <!-- ============ Top header ============ -->
+    <header class="app-header">
+        <div class="app-title">
+            <div class="logo">
+                <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z"/></svg>
+            </div>
+            <div>
+                <div>祁连山国家公园全过程监控系统</div>
+                <div class="sub">Qilian Mountain National Park Monitoring System</div>
+            </div>
+        </div>
+        <nav class="app-nav" id="appNav">
+            <button class="nav-item active" data-module="home">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>首页</span>
+            </button>
+            <button class="nav-item" data-module="grid">
+                <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>
+                <span>网格监控</span>
+            </button>
+            <button class="nav-item" data-module="eco">
+                <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C3 8 17 8 17 8z"/></svg>
+                <span>生态环境</span>
+            </button>
+            <button class="nav-item" data-module="wildlife">
+                <svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 6 3 11c0 4 3 7 6 8.5V22h2v-2h2v2h2v-2.5c3-1.5 6-4.5 6-8.5 0-5-4-9-9-9zm-3 9a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm6 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
+                <span>动植物</span>
+            </button>
+            <button class="nav-item" data-module="human">
+                <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                <span>人类活动</span>
+            </button>
+            <button class="nav-item" data-module="remote">
+                <svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 00-8 8 8 8 0 008 8 8 8 0 008-8 8 8 0 00-8-8zm0 2.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM7.5 13c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 0c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z"/></svg>
+                <span>遥感监控</span>
+            </button>
+            <button class="nav-item" data-module="database">
+                <svg viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4zM4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4zm0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4z"/></svg>
+                <span>数据库</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ============ Main ============ -->
+    <div class="app-main">
+
+        <!-- ===== Left sidebar ===== -->
+        <aside class="sidebar left" id="leftSidebar">
+
+            <!-- MODULE 1 - Home -->
+            <div class="module-panel active" data-panel="home">
+                <div class="panel-card" style="margin:10px;">
+                    <div class="card-head"><span class="title">系统导航</span></div>
+                    <div class="card-body">
+                        <div class="info-text">
+                            <p>本系统集成<span class="hl">遥感监测、地面观测、模型模拟</span>等多种技术手段，构建祁连山国家公园生态环境全过程监控体系。</p>
+                            <p>点击顶部导航栏切换各功能模块，查看不同维度的监控数据。</p>
+                        </div>
+                        <div class="info-stat">
+                            <div class="stat"><div class="v">5.02</div><div class="l">万平方公里</div></div>
+                            <div class="stat"><div class="v">8</div><div class="l">监测站点</div></div>
+                            <div class="stat"><div class="v">305</div><div class="l">人类活动点</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-card" style="margin:0 10px 10px;">
+                    <div class="card-head"><span class="title">图层控制</span></div>
+                    <div class="card-body check-list" id="homeLayerControl"></div>
+                </div>
+            </div>
+
+            <!-- MODULE 2 - Grid monitoring -->
+            <div class="module-panel" data-panel="grid">
+                <div class="panel-card" style="margin:10px;">
+                    <div class="card-head"><span class="title">高级检索</span></div>
+                    <div class="card-body">
+                        <div class="form-row"><label>县 / 乡</label><select class="form-control" id="gSearch1"><option value="">全部</option><option>肃南县</option><option>天祝县</option><option>祁连县</option><option>门源县</option></select></div>
+                        <div class="form-row"><label>市 / 州</label><select class="form-control" id="gSearch2"><option value="">全部</option><option>张掖市</option><option>武威市</option><option>海北州</option><option>海西州</option></select></div>
+                        <div class="form-row"><label>县 / 区</label><select class="form-control" id="gSearch3"><option value="">全部</option><option>肃南</option><option>天祝</option><option>祁连</option></select></div>
+                        <div class="form-row"><label>管护站</label><select class="form-control" id="gSearch4"><option value="">全部</option><option>大野口站</option><option>寺大隆站</option><option>西水站</option></select></div>
+                        <div class="form-row form-grid-2">
+                            <div><label>一级流域</label><select class="form-control" id="gSearch5"><option value="">全部</option><option>黑河流域</option><option>石羊河流域</option><option>疏勒河流域</option></select></div>
+                            <div><label>二级流域</label><select class="form-control" id="gSearch6"><option value="">全部</option><option>大通河</option><option>黑河干流</option></select></div>
+                        </div>
+                        <div class="form-row form-grid-2">
+                            <div><label>生态环境</label><select class="form-control" id="gSearch7"><option value="">全部</option><option>森林</option><option>草地</option><option>湿地</option><option>冰川</option></select></div>
+                            <div><label>地类名称</label><select class="form-control" id="gSearch8"><option value="">全部</option><option>天然林</option><option>灌木林</option><option>高寒草甸</option></select></div>
+                        </div>
+                        <div class="btn-row mt8">
+                            <button class="btn" id="gridSearchBtn">查询</button>
+                            <button class="btn ghost" id="gridResetBtn">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-card" style="margin:0 10px 10px;flex:1;display:flex;flex-direction:column;min-height:0;">
+                    <div class="card-head"><span class="title">检索结果</span><span class="list-count" id="gridResultCount" style="border:none;padding:0;">共 0 条</span></div>
+                    <div class="result-list" id="gridResultList" style="flex:1;overflow-y:auto;"></div>
+                </div>
+            </div>
+
+            <!-- MODULE 3 - Ecological environment -->
+            <div class="module-panel" data-panel="eco">
+                <div class="panel-card" style="margin:10px;flex:1;">
+                    <div class="card-head"><span class="title">森林生态水文监控过程</span></div>
+                    <div class="card-body">
+                        <div class="desc-block">
+                            本监控以<span class="em">大野口流域</span>森林生态水文观测站为依托，开展青海云杉林生态系统结构、功能及水文效应的长期定位观测。通过对<span class="em">气象要素、土壤水分、植被特征</span>等关键指标的连续监测，揭示森林生态系统水分运移规律与植被-水文耦合机理，为国家公园森林生态保护与科学管理提供数据支撑。
+                        </div>
+                        <div class="info-stat">
+                            <div class="stat"><div class="v">8</div><div class="l">观测站点</div></div>
+                            <div class="stat"><div class="v">3200</div><div class="l">平均海拔(m)</div></div>
+                        </div>
+                        <div class="section-title">监测站点列表<span class="sub">点击站点定位至地图</span></div>
+                        <div class="result-list" id="ecoStationList" style="max-height:240px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 4 - Wildlife -->
+            <div class="module-panel" data-panel="wildlife">
+                <div class="panel-card" style="margin:10px;flex:1;">
+                    <div class="card-head"><span class="title">野生动物动态监控</span></div>
+                    <div class="card-body">
+                        <div class="desc-block">
+                            采用<span class="em">无人机航测、红外相机</span>等先进技术手段，对祁连山国家公园内野生动物种群数量、分布范围及活动规律进行动态监测。重点监测对象包括<span class="em">雪豹、白唇鹿、岩羊、棕熊、赤狐</span>等珍稀物种，为野生动物保护管理提供科学依据。
+                        </div>
+                        <div class="section-title">物种筛选<span class="sub">选择物种查看监测记录</span></div>
+                        <div class="chip-row" id="wildlifeChips">
+                            <button class="chip active" data-species="">全部</button>
+                            <button class="chip" data-species="雪豹">雪豹</button>
+                            <button class="chip" data-species="白唇鹿">白唇鹿</button>
+                            <button class="chip" data-species="岩羊">岩羊</button>
+                            <button class="chip" data-species="赤狐">赤狐</button>
+                            <button class="chip" data-species="棕熊">棕熊</button>
+                        </div>
+                        <div class="section-title">监测记录</div>
+                        <div class="result-list" id="wildlifeObsList" style="max-height:280px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 4b - Plants (shared panel slot) -->
+            <div class="module-panel" data-panel="plants">
+                <div class="panel-card" style="margin:10px;flex:1;">
+                    <div class="card-head"><span class="title">濒危植物动态监控</span></div>
+                    <div class="card-body">
+                        <div class="desc-block">
+                            针对祁连山地区<span class="em">珍稀濒危植物</span>开展分布现状调查与动态监测，结合物种分布模型(SDM)模拟气候变化情景下物种适宜分布区的演变趋势，为濒危植物保护策略制定提供决策支持。
+                        </div>
+                        <div class="section-title">植物分类<span class="sub">勾选显示分布点</span></div>
+                        <div class="check-list" id="plantCheckList"></div>
+                        <div class="section-title">物种分布模拟<span class="sub">气候情景预测</span></div>
+                        <div class="form-row"><label>植物类型</label><select class="form-control" id="plantSimType"><option>山莨菪</option><option>桃儿七</option><option>穴丝荠</option><option>祁连獐牙菜</option><option>唐古特大黄</option></select></div>
+                        <div class="form-row form-grid-2">
+                            <div><label>温度因子</label><input class="form-control" id="plantSimTemp" value="2.5" type="number" step="0.1"></div>
+                            <div><label>降水因子</label><input class="form-control" id="plantSimPrecip" value="1.2" type="number" step="0.1"></div>
+                        </div>
+                        <div class="time-btns" id="plantSimTime">
+                            <button class="tb active" data-time="current">当前</button>
+                            <button class="tb" data-time="2050">2050</button>
+                            <button class="tb" data-time="2070">2070</button>
+                        </div>
+                        <button class="btn full" id="plantSimBtn">模拟结果展示</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 5 - Human activities -->
+            <div class="module-panel" data-panel="human">
+                <div class="panel-card" style="margin:10px;">
+                    <div class="card-head"><span class="title">人类活动查询</span></div>
+                    <div class="card-body">
+                        <div class="form-row"><label>所属区县</label><select class="form-control" id="hSearch1"><option value="">全部</option><option>肃南县</option><option>天祝县</option><option>祁连县</option><option>门源县</option></select></div>
+                        <div class="form-row"><label>所属类别</label><select class="form-control" id="hSearch2"><option value="">全部</option><option>城镇用地</option><option>农村居民地</option><option>水库坑塘</option><option>工矿用地</option><option>其他建设用地</option></select></div>
+                        <div class="form-row"><label>名称</label><input class="form-control" id="hSearch3" placeholder="输入名称关键词"></div>
+                        <button class="btn full" id="humanSearchBtn">查询</button>
+                    </div>
+                </div>
+                <div class="panel-card" style="margin:0 10px 10px;flex:1;display:flex;flex-direction:column;min-height:0;">
+                    <div class="card-head"><span class="title">活动点列表</span><span class="list-count" id="humanResultCount" style="border:none;padding:0;">共 0 条</span></div>
+                    <div class="result-list" id="humanResultList" style="flex:1;overflow-y:auto;"></div>
+                </div>
+            </div>
+
+            <!-- MODULE 6 - Remote sensing -->
+            <div class="module-panel" data-panel="remote">
+                <div class="subtabs" id="remoteSubtabs" style="margin:10px 10px 0;">
+                    <button class="subtab active" data-sub="sensitive">敏感点遥感监测</button>
+                    <button class="subtab" data-sub="eco-factor">生态要素遥感监测</button>
+                    <button class="subtab" data-sub="algorithm">遥感自动检测算法</button>
+                </div>
+                <div class="panel-card" style="margin:10px;flex:1;">
+                    <div class="card-head"><span class="title">遥感指标</span></div>
+                    <div class="card-body" style="padding:0;">
+                        <div class="ind-list" id="remoteIndList">
+                            <div class="ind-li"><span class="ind-dot"></span><span class="ind-lname">NDVI 植被指数</span><button class="ind-ts" data-ind="NDVI">时间序列</button></div>
+                            <div class="ind-li"><span class="ind-dot" style="background:#4caf50"></span><span class="ind-lname">植被覆盖度</span><button class="ind-ts" data-ind="FVC">时间序列</button></div>
+                            <div class="ind-li"><span class="ind-dot" style="background:#ffd166"></span><span class="ind-lname">NPP 净初级生产力</span><button class="ind-ts" data-ind="NPP">时间序列</button></div>
+                            <div class="ind-li"><span class="ind-dot" style="background:#ff9f43"></span><span class="ind-lname">草地生物量</span><button class="ind-ts" data-ind="BIOMASS">时间序列</button></div>
+                            <div class="ind-li"><span class="ind-dot" style="background:#06d6a0"></span><span class="ind-lname">森林蓄积量</span><button class="ind-ts" data-ind="FOREST">时间序列</button></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-card" style="margin:0 10px 10px;">
+                    <div class="card-head"><span class="title">NDVI 图例</span></div>
+                    <div class="card-body">
+                        <div class="ndvi-legend"></div>
+                        <div class="ndvi-legend-labels"><span>-0.2</span><span>0.2</span><span>0.5</span><span>0.8</span><span>1.0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 7 - Database -->
+            <div class="module-panel" data-panel="database">
+                <div class="panel-card" style="margin:10px;flex:1;">
+                    <div class="card-head"><span class="title">专题图层</span></div>
+                    <div class="card-body" style="padding:6px 10px;" id="dbLayerTree"></div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ===== Center map ===== -->
+        <div class="map-region" id="mapRegion">
+            <div id="map"></div>
+
+            <!-- map toolbar -->
+            <div class="map-toolbar" id="mapToolbar">
+                <button class="tool-btn" data-act="zoomin" data-tip="放大">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14zm2.5-4h-2v2H8v2h2v2h2v-2h2v-2h-2z"/></svg>
+                </button>
+                <button class="tool-btn" data-act="zoomout" data-tip="缩小">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14zM7 11h5v2H7z"/></svg>
+                </button>
+                <button class="tool-btn" data-act="reset" data-tip="复位">
+                    <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                </button>
+                <div class="tool-divider"></div>
+                <button class="tool-btn" data-act="layers" data-tip="图层控制">
+                    <svg viewBox="0 0 24 24"><path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/></svg>
+                </button>
+                <button class="tool-btn" data-act="measure" data-tip="测量">
+                    <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"/></svg>
+                </button>
+                <div class="tool-divider"></div>
+                <button class="tool-btn" data-act="fullscreen" data-tip="全屏">
+                    <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                </button>
+            </div>
+
+            <!-- map overlay title -->
+            <div class="map-overlay-title" id="mapOverlayTitle">一张图 · 祁连山国家公园</div>
+
+            <!-- legend -->
+            <div class="map-legend" id="mapLegend">
+                <div class="lg-title">图例</div>
+                <div id="legendBody"></div>
+            </div>
+
+            <!-- timeline (remote sensing) -->
+            <div class="timeline-bar" id="timelineBar">
+                <button class="tl-play" id="tlPlay">
+                    <svg viewBox="0 0 24 24" id="tlPlayIcon"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="tl-year" id="tlYear">2013</div>
+                <input type="range" id="tlRange" min="0" max="7" value="0" step="1">
+                <div class="muted" id="tlLabel">NDVI 年际变化</div>
+            </div>
+        </div>
+
+        <!-- ===== Right sidebar ===== -->
+        <aside class="sidebar right" id="rightSidebar">
+
+            <!-- MODULE 1 - Home right -->
+            <div class="module-panel active" data-panel="home">
+                <div class="tabs" id="homeTabs">
+                    <button class="tab active" data-tab="qilian">祁连山</button>
+                    <button class="tab" data-tab="park">国家公园</button>
+                    <button class="tab" data-tab="project">项目概况</button>
+                    <button class="tab" data-tab="demo">监控示范</button>
+                </div>
+                <div class="sidebar-body">
+                    <div class="tab-pane active" data-pane="qilian">
+                        <div class="info-text">
+                            <p><span class="hl">祁连山</span>是中国西部重要生态安全屏障，地处青藏高原东北边缘，横跨甘肃、青海两省，是黄河流域重要水源产流地。</p>
+                            <p>山脉呈西北-东南走向，长约800公里，平均海拔4000米以上，最高峰团结峰海拔5808米。冰川、雪山、森林、草原、湿地等生态系统类型丰富。</p>
+                            <div class="info-stat">
+                                <div class="stat"><div class="v">800</div><div class="l">山脉长度(km)</div></div>
+                                <div class="stat"><div class="v">4000</div><div class="l">平均海拔(m)</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" data-pane="park">
+                        <div class="info-text">
+                            <p><span class="hl">祁连山国家公园</span>总面积5.02万平方公里，其中甘肃片区3.44万平方公里，青海片区1.58万平方公里。</p>
+                            <p>公园内生态系统完整，分布有森林、草原、湿地、荒漠、冰川雪地等自然生态系统，是雪豹、白唇鹿等珍稀野生动植物的重要栖息地。</p>
+                            <div class="info-stat">
+                                <div class="stat"><div class="v">5.02</div><div class="l">万km² 总面积</div></div>
+                                <div class="stat"><div class="v">3.44</div><div class="l">万km² 甘肃</div></div>
+                                <div class="stat"><div class="v">1.58</div><div class="l">万km² 青海</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" data-pane="project">
+                        <div class="info-text">
+                            <p>本项目依托<span class="hl">天空地一体化</span>监测体系，开展祁连山国家公园生态环境全过程监控。</p>
+                            <p>整合卫星遥感、无人机航测、地面观测站网与生态模型，实现生态系统格局、质量、服务功能及人类活动的动态监测与评估。</p>
+                            <p>建设目标：构建<span class="hl">"监测-评估-预警-决策"</span>全链条业务化运行平台。</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane" data-pane="demo">
+                        <div class="info-text">
+                            <p><span class="hl">大野口流域</span>森林生态水文监测示范区，布设8个观测站点，覆盖海拔2750-3650米梯度。</p>
+                            <p>示范区开展气象、土壤、植被、水文等多要素连续观测，为森林生态系统过程研究提供长期数据支撑。</p>
+                            <p>主要监测要素：气温、降水、土壤温湿度、植被覆盖度、生物量等。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 2 - Grid right -->
+            <div class="module-panel" data-panel="grid">
+                <div class="sidebar-body">
+                    <div class="section-title">生态系统监控<span class="sub">各类生态系统面积统计</span></div>
+                    <div class="panel-card">
+                        <div class="card-body" id="gridEcoPanel"></div>
+                    </div>
+                    <div class="section-title">人类活动监控<span class="sub">建设用地统计</span></div>
+                    <div class="panel-card">
+                        <div class="card-body" id="gridHumanPanel"></div>
+                    </div>
+                    <div class="section-title">濒危动植物监控<span class="sub">物种多样性</span></div>
+                    <div class="panel-card">
+                        <div class="card-body" id="gridWildlifePanel"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 3 - Eco right -->
+            <div class="module-panel" data-panel="eco">
+                <div class="sidebar-body">
+                    <div class="section-title">地面监测<span class="sub">气象要素时序</span></div>
+                    <div class="panel-card">
+                        <div class="card-body">
+                            <div class="form-row form-grid-2">
+                                <div><label>气象要素</label><select class="form-control" id="meteoMetric">
+                                    <option value="air_temp">气温</option>
+                                    <option value="soil_temp">土壤温度</option>
+                                    <option value="canopy_temp">冠层温度</option>
+                                    <option value="atmosphere_temp">大气温度</option>
+                                    <option value="precipitation">降水量</option>
+                                    <option value="humidity">湿度</option>
+                                    <option value="wind_speed">风速</option>
+                                </select></div>
+                                <div><label>监测站点</label><select class="form-control" id="meteoStation"><option value="DYK001">大野口站-1</option></select></div>
+                            </div>
+                            <div class="form-row form-grid-2">
+                                <div><label>开始日期</label><input type="date" class="form-control" id="meteoStart" value="2020-01-01"></div>
+                                <div><label>结束日期</label><input type="date" class="form-control" id="meteoEnd" value="2022-12-31"></div>
+                            </div>
+                            <button class="btn full" id="meteoQueryBtn">查询</button>
+                            <div class="chart-box tall mt8" id="meteoChart"></div>
+                        </div>
+                    </div>
+                    <div class="section-title">遥感监测<span class="sub">生态指标产品</span></div>
+                    <div class="panel-card">
+                        <div class="card-body">
+                            <div class="ind-grid" id="ecoIndGrid">
+                                <div class="ind-card"><div class="ind-ico"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div><div class="ind-name">亚米级遥感影像</div><div class="ind-sub">高分影像</div></div>
+                                <div class="ind-card"><div class="ind-ico"><svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C3 8 17 8 17 8z"/></svg></div><div class="ind-name">NDVI</div><div class="ind-sub">植被指数</div></div>
+                                <div class="ind-card"><div class="ind-ico"><svg viewBox="0 0 24 24"><path d="M12 2C7 2 3 6 3 11c0 4 3 7 6 8.5V22h2v-2h2v2h2v-2.5c3-1.5 6-4.5 6-8.5 0-5-4-9-9-9z"/></svg></div><div class="ind-name">植被覆盖度</div><div class="ind-sub">FVC</div></div>
+                                <div class="ind-card"><div class="ind-ico"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></div><div class="ind-name">NPP</div><div class="ind-sub">净初级生产力</div></div>
+                                <div class="ind-card"><div class="ind-ico"><svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5.5 3.84 10.74 8 12 4.16-1.26 8-6.5 8-12V6l-8-4z"/></svg></div><div class="ind-name">草地生物量</div><div class="ind-sub">Biomass</div></div>
+                                <div class="ind-card"><div class="ind-ico"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div><div class="ind-name">森林蓄积量</div><div class="ind-sub">Forest stock</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-title">生态系统服务<span class="sub">InVEST 模型评估</span></div>
+                    <div class="panel-card">
+                        <div class="card-body center">
+                            <button class="btn" id="investBtn">InVEST 模型评估</button>
+                            <div class="muted mt8" style="font-size:11px;">点击运行生态系统服务评估模型</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 4 - Wildlife right -->
+            <div class="module-panel" data-panel="wildlife">
+                <div class="sidebar-body">
+                    <div class="section-title">物种多样性统计<span class="sub">分类群统计</span></div>
+                    <div class="panel-card"><div class="card-body" id="wildlifeSummary"></div></div>
+                    <div class="section-title">视频监测信息<span class="sub">实时影像</span></div>
+                    <div class="media-card" id="wildlifeVideoCard">
+                        <div class="mc-thumb"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg><span class="tag">VIDEO</span></div>
+                        <div class="mc-meta">
+                            <div class="row"><span class="k">拍摄时间</span><span class="v" id="wvTime">--</span></div>
+                            <div class="row"><span class="k">监测站点</span><span class="v" id="wvStation">--</span></div>
+                            <div class="row"><span class="k">物种</span><span class="v" id="wvSpecies">--</span></div>
+                        </div>
+                    </div>
+                    <div class="section-title">照片监测信息<span class="sub">红外相机</span></div>
+                    <div class="media-card" id="wildlifePhotoCard">
+                        <div class="mc-thumb"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span class="tag">PHOTO</span></div>
+                        <div class="mc-meta">
+                            <div class="row"><span class="k">拍摄时间</span><span class="v" id="wpTime">--</span></div>
+                            <div class="row"><span class="k">监测站点</span><span class="v" id="wpStation">--</span></div>
+                            <div class="row"><span class="k">温度</span><span class="v" id="wpTemp">--</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 4b - Plants right -->
+            <div class="module-panel" data-panel="plants">
+                <div class="sidebar-body">
+                    <div class="section-title">濒危植物统计<span class="sub">保护等级分类</span></div>
+                    <div class="panel-card"><div class="card-body" id="plantSummary"></div></div>
+                    <div class="section-title">物种分布模拟结果<span class="sub">气候情景预测</span></div>
+                    <div class="panel-card">
+                        <div class="card-body">
+                            <div class="chart-box tall" id="plantSimChart"></div>
+                            <div class="muted center mt8" id="plantSimDesc" style="font-size:11px;">请设置参数后点击"模拟结果展示"</div>
+                        </div>
+                    </div>
+                    <div class="section-title">植物列表<span class="sub">点击定位分布点</span></div>
+                    <div class="panel-card"><div class="card-body" style="padding:0;"><div class="result-list" id="plantList" style="max-height:200px;"></div></div></div>
+                </div>
+            </div>
+
+            <!-- MODULE 5 - Human right -->
+            <div class="module-panel" data-panel="human">
+                <div class="sidebar-body">
+                    <div class="section-title">分区统计<span class="sub">功能区分人类活动</span></div>
+                    <div class="panel-card"><div class="card-body" id="humanZonePanel"></div></div>
+                    <div class="section-title">趋势分析<span class="sub">2013-2019 年际变化</span></div>
+                    <div class="panel-card"><div class="card-body"><div class="chart-box tall" id="humanTrendChart"></div></div></div>
+                </div>
+            </div>
+
+            <!-- MODULE 6 - Remote right -->
+            <div class="module-panel" data-panel="remote">
+                <div class="sidebar-body">
+                    <div class="section-title">指标年际变化<span class="sub" id="remoteIndLabel">NDVI</span></div>
+                    <div class="panel-card"><div class="card-body"><div class="chart-box tall" id="remoteChart"></div></div></div>
+                    <div class="section-title">降水监测<span class="sub">2000-2018 时间序列</span></div>
+                    <div class="panel-card">
+                        <div class="card-body">
+                            <div class="toggle-group" id="precipToggle">
+                                <button class="tg active" data-type="bar">柱状图</button>
+                                <button class="tg" data-type="line">折线图</button>
+                            </div>
+                            <div class="chart-box" id="precipChart"></div>
+                            <div class="section-title" style="margin-top:12px;">降水统计表</div>
+                            <div style="overflow:auto;max-height:160px;"><table class="stat-table" id="precipTable"></table></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 7 - Database right -->
+            <div class="module-panel" data-panel="database">
+                <div class="sidebar-body">
+                    <div class="section-title">资源概览<span class="sub">数据资源统计</span></div>
+                    <div class="panel-card"><div class="card-body" id="dbResourcePanel"></div></div>
+                    <div class="section-title">图层属性<span class="sub">当前图层信息</span></div>
+                    <div class="panel-card"><div class="card-body info-text" id="dbLayerInfo"><p>请在左侧勾选专题图层查看详情。</p></div></div>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- ============ Status bar ============ -->
+    <footer class="status-bar">
+        <div class="sb-left">
+            <span><span class="dot"></span>系统运行中</span>
+            <span>经纬度：<span class="coord" id="coordDisplay">100.5000°E, 38.5000°N</span></span>
+            <span>海拔：<span class="coord" id="elevDisplay">--</span></span>
+        </div>
+        <div class="sb-right">
+            <span>比例尺：<span class="coord" id="scaleDisplay">1:--</span></span>
+            <span>缩放：<span class="coord" id="zoomDisplay">8</span></span>
+            <span>坐标系：WGS84</span>
+            <span class="muted">© 祁连山国家公园监控平台</span>
+        </div>
+    </footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
