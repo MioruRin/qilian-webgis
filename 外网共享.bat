@@ -1,41 +1,40 @@
 @echo off
-chcp 65001 >nul 2>&1
-title å¤–ç½‘å…±äº« - Cloudflare Tunnel
+title ÍâÍø¹²Ïí - Cloudflare Tunnel
 
 echo ============================================================
-echo   å¤–ç½‘å…±äº« - é€šè¿‡ Cloudflare Tunnel æš´éœ²åˆ°å…¬ç½‘
+echo   ÍâÍø¹²Ïí - Í¨¹ı Cloudflare Tunnel ±©Â¶µ½¹«Íø
 echo ============================================================
 echo.
 
-:: æ£€æŸ¥æœ¬åœ°æœåŠ¡æ˜¯å¦åœ¨è¿è¡Œ
-echo [æ£€æŸ¥] æœ¬åœ°æœåŠ¡çŠ¶æ€...
+:: ¼ì²é±¾µØ·şÎñÊÇ·ñÔÚÔËĞĞ
+echo [¼ì²é] ±¾µØ·şÎñ×´Ì¬...
 python -c "import urllib.request; urllib.request.urlopen('http://localhost:5000', timeout=3)" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [é”™è¯¯] æœ¬åœ°æœåŠ¡æœªå¯åŠ¨! è¯·å…ˆè¿è¡Œ "å¯åŠ¨æœåŠ¡.bat"
+    echo [´íÎó] ±¾µØ·şÎñÎ´Æô¶¯! ÇëÏÈÔËĞĞ "Æô¶¯·şÎñ.bat"
     pause
     exit /b 1
 )
-echo       æœ¬åœ°æœåŠ¡è¿è¡Œä¸­.
+echo       ±¾µØ·şÎñÔËĞĞÖĞ.
 echo.
 
-:: æ£€æŸ¥ cloudflared
+:: ¼ì²é cloudflared
 set CF_PATH=%~dp0cloudflared.exe
 if not exist "%CF_PATH%" (
-    echo [æç¤º] æœªæ‰¾åˆ° cloudflared.exe, æ­£åœ¨ä¸‹è½½...
+    echo [ÌáÊ¾] Î´ÕÒµ½ cloudflared.exe, ÕıÔÚÏÂÔØ...
     powershell -Command "Invoke-WebRequest -Uri 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe' -OutFile '%CF_PATH%' -UseBasicParsing"
     if not exist "%CF_PATH%" (
-        echo [é”™è¯¯] cloudflared ä¸‹è½½å¤±è´¥, è¯·æ‰‹åŠ¨ä¸‹è½½æ”¾ç½®åˆ°é¡¹ç›®æ ¹ç›®å½•
+        echo [´íÎó] cloudflared ÏÂÔØÊ§°Ü, ÇëÊÖ¶¯ÏÂÔØ·ÅÖÃµ½ÏîÄ¿¸ùÄ¿Â¼
         pause
         exit /b 1
     )
-    echo       ä¸‹è½½å®Œæˆ.
+    echo       ÏÂÔØÍê³É.
 )
 echo.
 
 echo ============================================================
-echo   æ­£åœ¨åˆ›å»ºå…¬ç½‘è®¿é—®é“¾æ¥...
-echo   é“¾æ¥ç”Ÿæˆåè¯·å¤åˆ¶åˆ°æµè§ˆå™¨æˆ–åˆ†äº«ç»™ä»–äºº
-echo   æŒ‰ Ctrl+C å¯åœæ­¢å¤–ç½‘å…±äº«
+echo   ÕıÔÚ´´½¨¹«Íø·ÃÎÊÁ´½Ó...
+echo   Á´½ÓÉú³ÉºóÇë¸´ÖÆµ½ä¯ÀÀÆ÷»ò·ÖÏí¸øËûÈË
+echo   °´ Ctrl+C ¿ÉÍ£Ö¹ÍâÍø¹²Ïí
 echo ============================================================
 echo.
 
