@@ -1,58 +1,57 @@
 @echo off
-chcp 65001 >nul 2>&1
-title ç¥è¿å±±å›½å®¶å…¬å›­WebGISç›‘æ§ç³»ç»Ÿ
+title ÆîÁ¬É½¹ú¼Ò¹«Ô°WebGIS¼à¿ØÏµÍ³
 
 echo ============================================================
-echo   ç¥è¿å±±å›½å®¶å…¬å›­å…¨è¿‡ç¨‹ç›‘æ§ç³»ç»Ÿ - å¯åŠ¨ç¨‹åº
+echo   ÆîÁ¬É½¹ú¼Ò¹«Ô°È«¹ı³Ì¼à¿ØÏµÍ³ - Æô¶¯³ÌĞò
 echo ============================================================
 echo.
 
-:: æ£€æŸ¥ Python
+:: ¼ì²é Python
 where python >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [é”™è¯¯] æœªæ‰¾åˆ° Pythonï¼Œè¯·å…ˆå®‰è£… Python 3.8+
-    echo        ä¸‹è½½åœ°å€: https://www.python.org/downloads/
-    echo        å®‰è£…æ—¶è¯·å‹¾é€‰ "Add Python to PATH"
+    echo [´íÎó] Î´ÕÒµ½ Python£¬ÇëÏÈ°²×° Python 3.8+
+    echo        ÏÂÔØµØÖ·: https://www.python.org/downloads/
+    echo        °²×°Ê±Çë¹´Ñ¡ "Add Python to PATH"
     pause
     exit /b 1
 )
 
-:: æ˜¾ç¤º Python ç‰ˆæœ¬
-echo [1/3] Python ç¯å¢ƒæ£€æŸ¥...
+:: ÏÔÊ¾ Python °æ±¾
+echo [1/3] Python »·¾³¼ì²é...
 python --version
 echo.
 
-:: å®‰è£…ä¾èµ–
-echo [2/3] æ£€æŸ¥ä¾èµ–åŒ…...
+:: °²×°ÒÀÀµ
+echo [2/3] ¼ì²éÒÀÀµ°ü...
 python -c "import flask" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo       æ­£åœ¨å®‰è£…ä¾èµ–åŒ… (flask, flask-cors)...
+    echo       ÕıÔÚ°²×°ÒÀÀµ°ü (flask, flask-cors)...
     pip install flask flask-cors -q
     if %errorlevel% neq 0 (
-        echo [é”™è¯¯] ä¾èµ–å®‰è£…å¤±è´¥ï¼Œè¯·æ‰‹åŠ¨æ‰§è¡Œ: pip install flask flask-cors
+        echo [´íÎó] ÒÀÀµ°²×°Ê§°Ü£¬ÇëÊÖ¶¯Ö´ĞĞ: pip install flask flask-cors
         pause
         exit /b 1
     )
-    echo       ä¾èµ–å®‰è£…å®Œæˆ.
+    echo       ÒÀÀµ°²×°Íê³É.
 ) else (
-    echo       ä¾èµ–åŒ…å·²å°±ç»ª.
+    echo       ÒÀÀµ°üÒÑ¾ÍĞ÷.
 )
 echo.
 
-:: å¯åŠ¨æœåŠ¡
-echo [3/3] å¯åŠ¨ WebGIS æœåŠ¡...
+:: Æô¶¯·şÎñ
+echo [3/3] Æô¶¯ WebGIS ·şÎñ...
 echo.
 echo ============================================================
-echo   æœåŠ¡åœ°å€: http://localhost:5000
-echo   æµè§ˆå™¨ä¼šè‡ªåŠ¨æ‰“å¼€, å¦‚æœªæ‰“å¼€è¯·æ‰‹åŠ¨è®¿é—®ä¸Šæ–¹åœ°å€
-echo   æŒ‰ Ctrl+C å¯åœæ­¢æœåŠ¡
+echo   ·şÎñµØÖ·: http://localhost:5000
+echo   ä¯ÀÀÆ÷»á×Ô¶¯´ò¿ª, ÈçÎ´´ò¿ªÇëÊÖ¶¯·ÃÎÊÉÏ·½µØÖ·
+echo   °´ Ctrl+C ¿ÉÍ£Ö¹·şÎñ
 echo ============================================================
 echo.
 
-:: å»¶è¿Ÿ2ç§’åæ‰“å¼€æµè§ˆå™¨
+:: ÑÓ³Ù2Ãëºó´ò¿ªä¯ÀÀÆ÷
 start /b "" cmd /c "timeout /t 3 /nobreak >nul && start http://localhost:5000"
 
-:: å¯åŠ¨ Flask
+:: Æô¶¯ Flask
 cd /d "%~dp0backend"
 python app.py
 
